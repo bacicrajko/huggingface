@@ -12,6 +12,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--training_dir", type=str)
     parser.add_argument("--output_dir", type=str)
+    parser.add_argument("--data_field", type=str)
     args, _ = parser.parse_known_args()
 
     train_dataset = load_from_disk(args.training_dir)
@@ -44,7 +45,7 @@ if __name__ == "__main__":
                          max_seq_length=256,
                          train_dataset=train_dataset,
                          tokenizer=llama_tokenizer,
-                         dataset_text_field='merged_text',
+                         dataset_text_field=args.data_field,
                          peft_config=LoraConfig(r=64, lora_alpha=16, lora_dropout=0.1, task_type='CAUSAL_LM', target_modules="all-linear",))
 
     if get_last_checkpoint(args.output_dir) is not None:
